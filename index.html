@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Unseen | Anonymous Blind Dating & Secret Couples</title>
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: #14141c;
+      --accent: #ff2e63;
+      --accent-sec: #7928ca;
+      --text: #f4f4f6;
+      --muted: #9ca3af;
+      --border: #262633;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.6; padding: 20px; display: flex; justify-content: center; }
+    .container { max-width: 520px; width: 100%; }
+    header { text-align: center; padding: 30px 0 20px; }
+    .badge { display: inline-block; background: rgba(255, 46, 99, 0.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+    h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 0.95rem; }
+    
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 25px 0; background: var(--card); padding: 6px; border-radius: 12px; border: 1px solid var(--border); }
+    .tab-btn { background: transparent; border: none; color: var(--muted); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+    .tab-btn.active { background: var(--accent); color: white; }
+    .tab-btn.active.couple-tab { background: var(--accent-sec); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #d1d5db; }
+    input, select, textarea { width: 100%; background: #0b0b0f; border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-size: 0.95rem; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    
+    .submit-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    .submit-btn.couple-btn { background: var(--accent-sec); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .rules { font-size: 0.8rem; color: var(--muted); background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border-left: 3px solid var(--accent); margin-bottom: 25px; }
+    .rules ul { padding-left: 18px; margin-top: 6px; }
+    .rules li { margin-bottom: 4px; }
+
+    .hidden { display: none; }
+    #receipt { text-align: center; padding: 30px 20px; }
+    .code-box { background: #0b0b0f; border: 1px dashed var(--accent); padding: 16px; font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; color: var(--accent); border-radius: 10px; margin: 16px 0; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">CAMPUS ONLY • LAUNCHING NOV 15</div>
+    <h1>Campus Unseen</h1>
+    <p class="subtitle">100% Anonymous Blind Dates & Secret Campus Missions.</p>
+  </header>
+
+  <div class="rules">
+    <strong>Strict Campus Protocol:</strong>
+    <ul>
+      <li><strong>No Real Names or Photos:</strong> Use burner handles (Telegram/Alt IG) only.</li>
+      <li><strong>Campus-Only Meets:</strong> All blind dates & couple missions happen strictly inside public campus zones (10 AM – 5 PM).</li>
+      <li><strong>Double-Consent:</strong> Identities stay locked until both sides DM their Secret PIN on Instagram.</li>
+    </ul>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="btn-blind" onclick="switchMode('blind')">Blind Match (Singles)</button>
+    <button class="tab-btn couple-tab" id="btn-couple" onclick="switchMode('couple')">Secret Couples</button>
+  </div>
+
+  <!-- BLIND MATCH FORM -->
+  <div id="form-blind" class="card">
+    <form onsubmit="submitForm(event, 'blind')">
+      <div class="form-group">
+        <label>I am a...</label>
+        <select id="b-gender" required>
+          <option value="">Select</option>
+          <option value="Male">Guy</option>
+          <option value="Female">Girl</option>
+          <option value="Non-Binary">Non-Binary</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Looking to match with...</label>
+        <select id="b-looking" required>
+          <option value="">Select</option>
+          <option value="Female">Girl</option>
+          <option value="Male">Guy</option>
+          <option value="Anyone">Anyone</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Year & Broad Stream (No Roll Numbers)</label>
+        <input type="text" id="b-yeardept" placeholder="e.g., 2nd Year, Biotech / Engineering" required>
+      </div>
+      <div class="form-group">
+        <label>Vibe Check: Ideal campus hangout & music taste?</label>
+        <textarea id="b-vibe" rows="3" placeholder="e.g., Late afternoon chai near main gate, indie/Bollywood, hate loud crowds..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Burner Contact Handle (Telegram or Alt Instagram)</label>
+        <input type="text" id="b-handle" placeholder="@your_alt_handle" required>
+      </div>
+      <div class="form-group">
+        <label>Create a 4-Digit Secret PIN (Needed to claim match via DM)</label>
+        <input type="password" id="b-pin" maxlength="4" pattern="\d{4}" placeholder="e.g., 4829" required>
+      </div>
+      <button type="submit" class="submit-btn" id="submit-blind">Generate My Blind Code</button>
+    </form>
+  </div>
+
+  <!-- SECRET COUPLES FORM -->
+  <div id="form-couple" class="card hidden">
+    <form onsubmit="submitForm(event, 'couple')">
+      <div class="form-group">
+        <label>Your Secret Couple Alias</label>
+        <input type="text" id="c-alias" placeholder="e.g., Library Ghosts / Chai Lovers" required>
+      </div>
+      <div class="form-group">
+        <label>How long have you been keeping it low-key?</label>
+        <input type="text" id="c-duration" placeholder="e.g., 4 months" required>
+      </div>
+      <div class="form-group">
+        <label>Favorite sneaky campus spot or story</label>
+        <textarea id="c-story" rows="2" placeholder="e.g., Passing notes in the 2nd floor lab..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Partner 1 Burner IG/Telegram Handle</label>
+        <input type="text" id="c-handle1" placeholder="@partner1_alt" required>
+      </div>
+      <div class="form-group">
+        <label>Partner 2 Burner IG/Telegram Handle</label>
+        <input type="text" id="c-handle2" placeholder="@partner2_alt" required>
+      </div>
+      <div class="form-group">
+        <label>Joint 4-Digit Secret PIN (Both must DM this PIN to verify)</label>
+        <input type="password" id="c-pin" maxlength="4" pattern="\d{4}" placeholder="e.g., 9104" required>
+      </div>
+      <button type="submit" class="submit-btn couple-btn" id="submit-couple">Register Secret Couple</button>
+    </form>
+  </div>
+
+  <!-- RECEIPT SCREEN -->
+  <div id="receipt" class="card hidden">
+    <h2>You're In the Vault.</h2>
+    <p class="subtitle" style="margin-top:8px;">Screenshot this immediately. Do not lose your ID or PIN.</p>
+    <div class="code-box" id="generated-code">BM-0000</div>
+    <p style="font-size: 0.85rem; color: #d1d5db; margin-bottom: 20px;">
+      Watch our Instagram Story starting <strong>Nov 15</strong>. When your Code ID drops, DM us your <strong>4-digit Secret PIN</strong> to unlock your campus meetup slot or dead-drop surprise.
+    </p>
+    <a href="https://instagram.com" target="_blank" style="display:inline-block; background:#262633; color:white; text-decoration:none; padding:12px 24px; border-radius:8px; font-weight:600;">Go to Instagram Page</a>
+  </div>
+</div>
+
+<script>
+  // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+  const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+
+  function switchMode(mode) {
+    document.getElementById('form-blind').classList.toggle('hidden', mode !== 'blind');
+    document.getElementById('form-couple').classList.toggle('hidden', mode !== 'couple');
+    document.getElementById('receipt').classList.add('hidden');
+    
+    document.getElementById('btn-blind').classList.toggle('active', mode === 'blind');
+    document.getElementById('btn-couple').classList.toggle('active', mode === 'couple');
+  }
+
+  async function submitForm(e, mode) {
+    e.preventDefault();
+    const btn = document.getElementById(mode === 'blind' ? 'submit-blind' : 'submit-couple');
+    btn.disabled = true;
+    btn.innerText = "Encrypting & Saving...";
+
+    let payload = { mode: mode };
+    if (mode === 'blind') {
+      payload.gender = document.getElementById('b-gender').value;
+      payload.lookingFor = document.getElementById('b-looking').value;
+      payload.yearDept = document.getElementById('b-yeardept').value;
+      payload.vibe = document.getElementById('b-vibe').value;
+      payload.handle = document.getElementById('b-handle').value;
+      payload.pin = document.getElementById('b-pin').value;
+    } else {
+      payload.alias = document.getElementById('c-alias').value;
+      payload.duration = document.getElementById('c-duration').value;
+      payload.story = document.getElementById('c-story').value;
+      payload.handle1 = document.getElementById('c-handle1').value;
+      payload.handle2 = document.getElementById('c-handle2').value;
+      payload.pin = document.getElementById('c-pin').value;
+    }
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      
+      if (result.status === "success") {
+        document.getElementById('form-blind').classList.add('hidden');
+        document.getElementById('form-couple').classList.add('hidden');
+        document.getElementById('receipt').classList.remove('hidden');
+        document.getElementById('generated-code').innerText = result.code;
+      } else {
+        alert("Submission error. Please try again.");
+        btn.disabled = false;
+        btn.innerText = "Try Again";
+      }
+    } catch (err) {
+      alert("Network error. Check your connection.");
+      btn.disabled = false;
+      btn.innerText = "Try Again";
+    }
+  }
+</script>
+</body>
+</html>
